@@ -1,0 +1,89 @@
+//CREATE
+{
+  "userId": "60d5f4e4f3a0b1b1b1b1b1b1",
+  "items": [
+    {
+      "productId": "60d5f4e4f3a0b1b1b1b1b1b2",
+      "quantity": 2
+    },
+    {
+      "productId": "60d5f4e4f3a0b1b1b1b1b1b3",
+      "quantity": 1
+    }
+  ]
+}
+
+{
+  "name": "Wireless Keyboard",
+  "description": "A sleek and responsive wireless keyboard.",
+  "price": 49.99,
+  "category": "60d5f4e4f3a0b1b1b1b1b1b1",
+  "images": ["image1.jpg", "image2.jpg"],
+  "stock": 100
+}
+
+//came up with wireless keyboard because it was assumed that 'product' was not just food.//
+
+
+//GET
+app.get('/product', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// DELETE - /product/:productId
+app.delete('/product/:productId', async (req, res) => {
+  try {
+    // Validate that the provided productId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.productId)) {
+      return res.status(400).json({ message: 'Invalid product ID format' });
+    }
+
+    // Attempt to find and delete the product by its ID
+    const deletedProduct = await Product.findByIdAndDelete(req.params.productId);
+
+    // Check if the product was found and deleted
+    if (!deletedProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Respond with the deleted product's details
+    res.status(200).json({ message: 'Product deleted successfully', product: deletedProduct });
+  } catch (error) {
+    // Handle unexpected errors and respond with a 500 status code
+    console.error('Error deleting product:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Connect to MongoDB and start the server
+mongoose.connect('mongodb://localhost:27017/yourDatabase', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => {
+    app.listen(3000, () => {
+      console.log('Server running on http://localhost:3000');
+    });
+  })
+  .catch(err => {
+    console.error('Database connection error:', err);
+  });
+
+
+//UPDATE
+{
+  "userId": "userIdHere",
+  "productId": "productIdHere",
+  "quantity": 2
+}
+
+{
+  "userId": "userIdHere",
+  "productId": "productIdHere"
+}

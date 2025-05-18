@@ -1,652 +1,356 @@
-<div align="center">
-🎉 announcing <a href="https://github.com/dotenvx/dotenvx">dotenvx</a>. <em>run anywhere, multi-environment, encrypted envs</em>.
-</div>
+# MongoDB Node.js Driver
 
-&nbsp;
+The official [MongoDB](https://www.mongodb.com/) driver for Node.js.
 
-<div align="center">
+**Upgrading to version 6? Take a look at our [upgrade guide here](https://github.com/mongodb/node-mongodb-native/blob/HEAD/etc/notes/CHANGES_6.0.0.md)!**
 
-**Special thanks to [our sponsors](https://github.com/sponsors/motdotla)**
+## Quick Links
 
-<br>
-<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=dotenv_p_20220831">
-  <div>
-    <img src="https://res.cloudinary.com/dotenv-org/image/upload/v1661980709/warp_hi8oqj.png" width="230" alt="Warp">
-  </div>
-  <b>Warp is a blazingly fast, Rust-based terminal reimagined to work like a modern app.</b>
-  <div>
-    <sup>Get more done in the CLI with real text editing, block-based output, and AI command search.</sup>
-  </div>
-</a>
-<br>
+| Site                     | Link                                                                                                                                  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Documentation            | [www.mongodb.com/docs/drivers/node](https://www.mongodb.com/docs/drivers/node)                                                        |
+| API Docs                 | [mongodb.github.io/node-mongodb-native](https://mongodb.github.io/node-mongodb-native)                                                |
+| `npm` package            | [www.npmjs.com/package/mongodb](https://www.npmjs.com/package/mongodb)                                                                |
+| MongoDB                  | [www.mongodb.com](https://www.mongodb.com)                                                                                            |
+| MongoDB University       | [learn.mongodb.com](https://learn.mongodb.com/catalog?labels=%5B%22Language%22%5D&values=%5B%22Node.js%22%5D)                         |
+| MongoDB Developer Center | [www.mongodb.com/developer](https://www.mongodb.com/developer/languages/javascript/)                                                  |
+| Stack Overflow           | [stackoverflow.com](https://stackoverflow.com/search?q=%28%5Btypescript%5D+or+%5Bjavascript%5D+or+%5Bnode.js%5D%29+and+%5Bmongodb%5D) |
+| Source Code              | [github.com/mongodb/node-mongodb-native](https://github.com/mongodb/node-mongodb-native)                                              |
+| Upgrade to v6            | [etc/notes/CHANGES_6.0.0.md](https://github.com/mongodb/node-mongodb-native/blob/HEAD/etc/notes/CHANGES_6.0.0.md)                     |
+| Contributing             | [CONTRIBUTING.md](https://github.com/mongodb/node-mongodb-native/blob/HEAD/CONTRIBUTING.md)                                           |
+| Changelog                | [HISTORY.md](https://github.com/mongodb/node-mongodb-native/blob/HEAD/HISTORY.md)                                                     |
 
-<a href="https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=dotenv"><img src="https://res.cloudinary.com/dotenv-org/image/upload/v1744035073/graphite_lgsrl8.gif" width="240" alt="Graphite" /></a>
 
-<a href="https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=dotenv">
-  <b>Graphite is the AI developer productivity platform helping teams on GitHub ship higher quality software, faster.</b>
-</a>
-<hr>
-</div>
 
-# dotenv [![NPM version](https://img.shields.io/npm/v/dotenv.svg?style=flat-square)](https://www.npmjs.com/package/dotenv)
+### Release Integrity
 
-<img src="https://raw.githubusercontent.com/motdotla/dotenv/master/dotenv.svg" alt="dotenv" align="right" width="200" />
+Releases are created automatically and signed using the [Node team's GPG key](https://pgp.mongodb.com/node-driver.asc). This applies to the git tag as well as all release packages provided as part of a GitHub release. To verify the provided packages, download the key and import it using gpg:
 
-Dotenv is a zero-dependency module that loads environment variables from a `.env` file into [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). Storing configuration in the environment separate from code is based on [The Twelve-Factor App](https://12factor.net/config) methodology.
+```shell
+gpg --import node-driver.asc
+```
 
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
-[![LICENSE](https://img.shields.io/github/license/motdotla/dotenv.svg)](LICENSE)
-[![codecov](https://codecov.io/gh/motdotla/dotenv-expand/graph/badge.svg?token=pawWEyaMfg)](https://codecov.io/gh/motdotla/dotenv-expand)
+The GitHub release contains a detached signature file for the NPM package (named
+`mongodb-X.Y.Z.tgz.sig`).
 
-* [🌱 Install](#-install)
-* [🏗️ Usage (.env)](#%EF%B8%8F-usage)
-* [🌴 Multiple Environments 🆕](#-manage-multiple-environments)
-* [🚀 Deploying (encryption) 🆕](#-deploying)
-* [📚 Examples](#-examples)
-* [📖 Docs](#-documentation)
-* [❓ FAQ](#-faq)
-* [⏱️ Changelog](./CHANGELOG.md)
+The following command returns the link npm package.
+```shell
+npm view mongodb@vX.Y.Z dist.tarball
+```
 
-## 🌱 Install
+Using the result of the above command, a `curl` command can return the official npm package for the release.
+
+To verify the integrity of the downloaded package, run the following command:
+```shell
+gpg --verify mongodb-X.Y.Z.tgz.sig mongodb-X.Y.Z.tgz
+```
+
+>[!Note]
+No verification is done when using npm to install the package. The contents of the Github tarball and npm's tarball are identical.
+
+### Bugs / Feature Requests
+
+Think you’ve found a bug? Want to see a new feature in `node-mongodb-native`? Please open a
+case in our issue management tool, JIRA:
+
+- Create an account and login [jira.mongodb.org](https://jira.mongodb.org).
+- Navigate to the NODE project [jira.mongodb.org/browse/NODE](https://jira.mongodb.org/browse/NODE).
+- Click **Create Issue** - Please provide as much information as possible about the issue type and how to reproduce it.
+
+Bug reports in JIRA for all driver projects (i.e. NODE, PYTHON, CSHARP, JAVA) and the
+Core Server (i.e. SERVER) project are **public**.
+
+### Support / Feedback
+
+For issues with, questions about, or feedback for the Node.js driver, please look into our [support channels](https://www.mongodb.com/docs/manual/support). Please do not email any of the driver developers directly with issues or questions - you're more likely to get an answer on the [MongoDB Community Forums](https://community.mongodb.com/tags/c/drivers-odms-connectors/7/node-js-driver).
+
+### Change Log
+
+Change history can be found in [`HISTORY.md`](https://github.com/mongodb/node-mongodb-native/blob/HEAD/HISTORY.md).
+
+### Compatibility
+
+The driver currently supports 4.0+ servers.
+
+** 4.0 support is deprecated and support will be removed in an upcoming driver release. **
+
+For exhaustive server and runtime version compatibility matrices, please refer to the following links:
+
+- [MongoDB](https://www.mongodb.com/docs/drivers/node/current/compatibility/#mongodb-compatibility)
+- [NodeJS](https://www.mongodb.com/docs/drivers/node/current/compatibility/#language-compatibility)
+
+#### Component Support Matrix
+
+The following table describes add-on component version compatibility for the Node.js driver. Only packages with versions in these supported ranges are stable when used in combination.
+
+| Component                                                                            | `mongodb@3.x`      | `mongodb@4.x`      | `mongodb@5.x`      | `mongodb@<6.12` | `mongodb@>=6.12`   |
+| ------------------------------------------------------------------------------------ | ------------------ | ------------------ | ------------------ | --------------- | ------------------ |
+| [bson](https://www.npmjs.com/package/bson)                                           | ^1.0.0             | ^4.0.0             | ^5.0.0             | ^6.0.0          | ^6.0.0             |
+| [bson-ext](https://www.npmjs.com/package/bson-ext)                                   | ^1.0.0 \|\| ^2.0.0 | ^4.0.0             | N/A                | N/A             | N/A                |
+| [kerberos](https://www.npmjs.com/package/kerberos)                                   | ^1.0.0             | ^1.0.0 \|\| ^2.0.0 | ^1.0.0 \|\| ^2.0.0 | ^2.0.1          | ^2.0.1             |
+| [mongodb-client-encryption](https://www.npmjs.com/package/mongodb-client-encryption) | ^1.0.0             | ^1.0.0 \|\| ^2.0.0 | ^2.3.0             | ^6.0.0          | ^6.0.0             |
+| [mongodb-legacy](https://www.npmjs.com/package/mongodb-legacy)                       | N/A                | ^4.0.0             | ^5.0.0             | ^6.0.0          | ^6.0.0             |
+| [@mongodb-js/zstd](https://www.npmjs.com/package/@mongodb-js/zstd)                   | N/A                | ^1.0.0             | ^1.0.0             | ^1.1.0          | ^1.1.0 \|\| ^2.0.0 |
+
+
+#### Typescript Version
+
+We recommend using the latest version of typescript, however we currently ensure the driver's public types compile against `typescript@4.4.0`.
+This is the lowest typescript version guaranteed to work with our driver: older versions may or may not work - use at your own risk.
+Since typescript [does not restrict breaking changes to major versions](https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes), we consider this support best effort.
+If you run into any unexpected compiler failures against our supported TypeScript versions, please let us know by filing an issue on our [JIRA](https://jira.mongodb.org/browse/NODE).
+
+Additionally, our Typescript types are compatible with the ECMAScript standard for our minimum supported Node version.  Currently, our Typescript targets es2021.
+
+## Installation
+
+The recommended way to get started using the Node.js 5.x driver is by using the `npm` (Node Package Manager) to install the dependency in your project.
+
+After you've created your own project using `npm init`, you can run:
 
 ```bash
-npm install dotenv --save
+npm install mongodb
 ```
 
-You can also use an npm-compatible package manager like yarn or bun:
+This will download the MongoDB driver and add a dependency entry in your `package.json` file.
 
-```bash
-yarn add dotenv
-# or
-bun add dotenv
-```
+If you are a Typescript user, you will need the Node.js type definitions to use the driver's definitions:
 
-## 🏗️ Usage
-
-<a href="https://www.youtube.com/watch?v=YtkZR0NFd1g">
-<div align="right">
-<img src="https://img.youtube.com/vi/YtkZR0NFd1g/hqdefault.jpg" alt="how to use dotenv video tutorial" align="right" width="330" />
-<img src="https://simpleicons.vercel.app/youtube/ff0000" alt="youtube/@dotenvorg" align="right" width="24" />
-</div>
-</a>
-
-Create a `.env` file in the root of your project (if using a monorepo structure like `apps/backend/app.js`, put it in the root of the folder where your `app.js` process runs):
-
-```dosini
-S3_BUCKET="YOURS3BUCKET"
-SECRET_KEY="YOURSECRETKEYGOESHERE"
-```
-
-As early as possible in your application, import and configure dotenv:
-
-```javascript
-require('dotenv').config()
-console.log(process.env) // remove this after you've confirmed it is working
-```
-
-.. [or using ES6?](#how-do-i-use-dotenv-with-import)
-
-```javascript
-import 'dotenv/config'
-```
-
-That's it. `process.env` now has the keys and values you defined in your `.env` file:
-
-```javascript
-require('dotenv').config()
-// or import 'dotenv/config' if you're using ES6
-
-...
-
-s3.getBucketCors({Bucket: process.env.S3_BUCKET}, function(err, data) {})
-```
-
-### Multiline values
-
-If you need multiline variables, for example private keys, those are now supported (`>= v15.0.0`) with line breaks:
-
-```dosini
-PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
-...
-Kh9NV...
-...
------END RSA PRIVATE KEY-----"
-```
-
-Alternatively, you can double quote strings and use the `\n` character:
-
-```dosini
-PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nKh9NV...\n-----END RSA PRIVATE KEY-----\n"
-```
-
-### Comments
-
-Comments may be added to your file on their own line or inline:
-
-```dosini
-# This is a comment
-SECRET_KEY=YOURSECRETKEYGOESHERE # comment
-SECRET_HASH="something-with-a-#-hash"
-```
-
-Comments begin where a `#` exists, so if your value contains a `#` please wrap it in quotes. This is a breaking change from `>= v15.0.0` and on.
-
-### Parsing
-
-The engine which parses the contents of your file containing environment variables is available to use. It accepts a String or Buffer and will return an Object with the parsed keys and values.
-
-```javascript
-const dotenv = require('dotenv')
-const buf = Buffer.from('BASIC=basic')
-const config = dotenv.parse(buf) // will return an object
-console.log(typeof config, config) // object { BASIC : 'basic' }
-```
-
-### Preload
-
-> Note: Consider using [`dotenvx`](https://github.com/dotenvx/dotenvx) instead of preloading. I am now doing (and recommending) so.
->
-> It serves the same purpose (you do not need to require and load dotenv), adds better debugging, and works with ANY language, framework, or platform. – [motdotla](https://github.com/motdotla)
-
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#-r---require-module) to preload dotenv. By doing this, you do not need to require and load dotenv in your application code.
-
-```bash
-$ node -r dotenv/config your_script.js
-```
-
-The configuration options below are supported as command line arguments in the format `dotenv_config_<option>=value`
-
-```bash
-$ node -r dotenv/config your_script.js dotenv_config_path=/custom/path/to/.env dotenv_config_debug=true
-```
-
-Additionally, you can use environment variables to set configuration options. Command line arguments will precede these.
-
-```bash
-$ DOTENV_CONFIG_<OPTION>=value node -r dotenv/config your_script.js
-```
-
-```bash
-$ DOTENV_CONFIG_ENCODING=latin1 DOTENV_CONFIG_DEBUG=true node -r dotenv/config your_script.js dotenv_config_path=/custom/path/to/.env
-```
-
-### Variable Expansion
-
-You need to add the value of another variable in one of your variables? Use [dotenv-expand](https://github.com/motdotla/dotenv-expand).
-
-### Command Substitution
-
-Use [dotenvx](https://github.com/dotenvx/dotenvx) to use command substitution.
-
-Add the output of a command to one of your variables in your .env file.
-
-```ini
-# .env
-DATABASE_URL="postgres://$(whoami)@localhost/my_database"
-```
-```js
-// index.js
-console.log('DATABASE_URL', process.env.DATABASE_URL)
-```
 ```sh
-$ dotenvx run --debug -- node index.js
-[dotenvx@0.14.1] injecting env (1) from .env
-DATABASE_URL postgres://yourusername@localhost/my_database
+npm install -D @types/node
 ```
 
-### Syncing
+## Driver Extensions
 
-You need to keep `.env` files in sync between machines, environments, or team members? Use [dotenvx](https://github.com/dotenvx/dotenvx) to encrypt your `.env` files and safely include them in source control. This still subscribes to the twelve-factor app rules by generating a decryption key separate from code.
+The MongoDB driver can optionally be enhanced by the following feature packages:
 
-### Multiple Environments
+Maintained by MongoDB:
 
-Use [dotenvx](https://github.com/dotenvx/dotenvx) to generate `.env.ci`, `.env.production` files, and more.
+- Zstd network compression - [@mongodb-js/zstd](https://github.com/mongodb-js/zstd)
+- MongoDB field level and queryable encryption - [mongodb-client-encryption](https://github.com/mongodb/libmongocrypt#readme)
+- GSSAPI / SSPI / Kerberos authentication - [kerberos](https://github.com/mongodb-js/kerberos)
 
-### Deploying
+Some of these packages include native C++ extensions.
+Consult the [trouble shooting guide here](https://github.com/mongodb/node-mongodb-native/blob/HEAD/etc/notes/native-extensions.md) if you run into compilation issues.
 
-You need to deploy your secrets in a cloud-agnostic manner? Use [dotenvx](https://github.com/dotenvx/dotenvx) to generate a private decryption key that is set on your production server.
+Third party:
 
-## 🌴 Manage Multiple Environments
+- Snappy network compression - [snappy](https://github.com/Brooooooklyn/snappy)
+- AWS authentication - [@aws-sdk/credential-providers](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/credential-providers)
 
-Use [dotenvx](https://github.com/dotenvx/dotenvx)
+## Quick Start
 
-Run any environment locally. Create a `.env.ENVIRONMENT` file and use `--env-file` to load it. It's straightforward, yet flexible.
+This guide will show you how to set up a simple application using Node.js and MongoDB. Its scope is only how to set up the driver and perform the simple CRUD operations. For more in-depth coverage, see the [official documentation](https://www.mongodb.com/docs/drivers/node/).
+
+### Create the `package.json` file
+
+First, create a directory where your application will live.
 
 ```bash
-$ echo "HELLO=production" > .env.production
-$ echo "console.log('Hello ' + process.env.HELLO)" > index.js
-
-$ dotenvx run --env-file=.env.production -- node index.js
-Hello production
-> ^^
+mkdir myProject
+cd myProject
 ```
 
-or with multiple .env files
+Enter the following command and answer the questions to create the initial structure for your new project:
 
 ```bash
-$ echo "HELLO=local" > .env.local
-$ echo "HELLO=World" > .env
-$ echo "console.log('Hello ' + process.env.HELLO)" > index.js
-
-$ dotenvx run --env-file=.env.local --env-file=.env -- node index.js
-Hello local
+npm init -y
 ```
 
-[more environment examples](https://dotenvx.com/docs/quickstart/environments)
+Next, install the driver as a dependency.
 
-## 🚀 Deploying
-
-Use [dotenvx](https://github.com/dotenvx/dotenvx).
-
-Add encryption to your `.env` files with a single command. Pass the `--encrypt` flag.
-
-```
-$ dotenvx set HELLO Production --encrypt -f .env.production
-$ echo "console.log('Hello ' + process.env.HELLO)" > index.js
-
-$ DOTENV_PRIVATE_KEY_PRODUCTION="<.env.production private key>" dotenvx run -- node index.js
-[dotenvx] injecting env (2) from .env.production
-Hello Production
+```bash
+npm install mongodb
 ```
 
-[learn more](https://github.com/dotenvx/dotenvx?tab=readme-ov-file#encryption)
+### Start a MongoDB Server
 
-## 📚 Examples
+For complete MongoDB installation instructions, see [the manual](https://www.mongodb.com/docs/manual/installation/).
 
-See [examples](https://github.com/dotenv-org/examples) of using dotenv with various frameworks, languages, and configurations.
+1. Download the right MongoDB version from [MongoDB](https://www.mongodb.org/downloads)
+2. Create a database directory (in this case under **/data**).
+3. Install and start a `mongod` process.
 
-* [nodejs](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-nodejs)
-* [nodejs (debug on)](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-nodejs-debug)
-* [nodejs (override on)](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-nodejs-override)
-* [nodejs (processEnv override)](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-custom-target)
-* [esm](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-esm)
-* [esm (preload)](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-esm-preload)
-* [typescript](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-typescript)
-* [typescript parse](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-typescript-parse)
-* [typescript config](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-typescript-config)
-* [webpack](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-webpack)
-* [webpack (plugin)](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-webpack2)
-* [react](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-react)
-* [react (typescript)](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-react-typescript)
-* [express](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-express)
-* [nestjs](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-nestjs)
-* [fastify](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-fastify)
+```bash
+mongod --dbpath=/data
+```
 
-## 📖 Documentation
+You should see the **mongod** process start up and print some status information.
 
-Dotenv exposes four functions:
+### Connect to MongoDB
 
-* `config`
-* `parse`
-* `populate`
-* `decrypt`
+Create a new **app.js** file and add the following code to try out some basic CRUD
+operations using the MongoDB driver.
 
-### Config
+Add code to connect to the server and the database **myProject**:
 
-`config` will read your `.env` file, parse the contents, assign it to
-[`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env),
-and return an Object with a `parsed` key containing the loaded content or an `error` key if it failed.
+> **NOTE:** Resolving DNS Connection issues
+>
+> Node.js 18 changed the default DNS resolution ordering from always prioritizing IPv4 to the ordering
+> returned by the DNS provider. In some environments, this can result in `localhost` resolving to
+> an IPv6 address instead of IPv4 and a consequent failure to connect to the server.
+>
+> This can be resolved by:
+>
+> - specifying the IP address family using the MongoClient `family` option (`MongoClient(<uri>, { family: 4 } )`)
+> - launching mongod or mongos with the ipv6 flag enabled ([--ipv6 mongod option documentation](https://www.mongodb.com/docs/manual/reference/program/mongod/#std-option-mongod.--ipv6))
+> - using a host of `127.0.0.1` in place of localhost
+> - specifying the DNS resolution ordering with the `--dns-resolution-order` Node.js command line argument (e.g. `node --dns-resolution-order=ipv4first`)
 
 ```js
-const result = dotenv.config()
+const { MongoClient } = require('mongodb');
+// or as an es module:
+// import { MongoClient } from 'mongodb'
 
-if (result.error) {
-  throw result.error
+// Connection URL
+const url = 'mongodb://localhost:27017';
+const client = new MongoClient(url);
+
+// Database Name
+const dbName = 'myProject';
+
+async function main() {
+  // Use connect method to connect to the server
+  await client.connect();
+  console.log('Connected successfully to server');
+  const db = client.db(dbName);
+  const collection = db.collection('documents');
+
+  // the following code examples can be pasted here...
+
+  return 'done.';
 }
 
-console.log(result.parsed)
+main()
+  .then(console.log)
+  .catch(console.error)
+  .finally(() => client.close());
 ```
 
-You can additionally, pass options to `config`.
+Run your app from the command line with:
 
-#### Options
+```bash
+node app.js
+```
 
-##### path
+The application should print **Connected successfully to server** to the console.
 
-Default: `path.resolve(process.cwd(), '.env')`
+### Insert a Document
 
-Specify a custom path if your file containing environment variables is located elsewhere.
+Add to **app.js** the following function which uses the **insertMany**
+method to add three documents to the **documents** collection.
 
 ```js
-require('dotenv').config({ path: '/custom/path/to/.env' })
+const insertResult = await collection.insertMany([{ a: 1 }, { a: 2 }, { a: 3 }]);
+console.log('Inserted documents =>', insertResult);
 ```
 
-By default, `config` will look for a file called .env in the current working directory.
+The **insertMany** command returns an object with information about the insert operations.
 
-Pass in multiple files as an array, and they will be parsed in order and combined with `process.env` (or `option.processEnv`, if set). The first value set for a variable will win, unless the `options.override` flag is set, in which case the last value set will win.  If a value already exists in `process.env` and the `options.override` flag is NOT set, no changes will be made to that value. 
+### Find All Documents
 
-```js  
-require('dotenv').config({ path: ['.env.local', '.env'] })
-```
-
-##### encoding
-
-Default: `utf8`
-
-Specify the encoding of your file containing environment variables.
+Add a query that returns all the documents.
 
 ```js
-require('dotenv').config({ encoding: 'latin1' })
+const findResult = await collection.find({}).toArray();
+console.log('Found documents =>', findResult);
 ```
 
-##### debug
+This query returns all the documents in the **documents** collection.
+If you add this below the insertMany example, you'll see the documents you've inserted.
 
-Default: `false`
+### Find Documents with a Query Filter
 
-Turn on logging to help debug why certain keys or values are not being set as you expect.
+Add a query filter to find only documents which meet the query criteria.
 
 ```js
-require('dotenv').config({ debug: process.env.DEBUG })
+const filteredDocs = await collection.find({ a: 3 }).toArray();
+console.log('Found documents filtered by { a: 3 } =>', filteredDocs);
 ```
 
-##### override
+Only the documents which match `'a' : 3` should be returned.
 
-Default: `false`
+### Update a document
 
-Override any environment variables that have already been set on your machine with values from your .env file(s). If multiple files have been provided in `option.path` the override will also be used as each file is combined with the next. Without `override` being set, the first value wins. With `override` set the last value wins. 
+The following operation updates a document in the **documents** collection.
 
 ```js
-require('dotenv').config({ override: true })
+const updateResult = await collection.updateOne({ a: 3 }, { $set: { b: 1 } });
+console.log('Updated documents =>', updateResult);
 ```
 
-##### processEnv
+The method updates the first document where the field **a** is equal to **3** by adding a new field **b** to the document set to **1**. `updateResult` contains information about whether there was a matching document to update or not.
 
-Default: `process.env`
+### Remove a document
 
-Specify an object to write your environment variables to. Defaults to `process.env` environment variables.
+Remove the document where the field **a** is equal to **3**.
 
 ```js
-const myObject = {}
-require('dotenv').config({ processEnv: myObject })
-
-console.log(myObject) // values from .env
-console.log(process.env) // this was not changed or written to
+const deleteResult = await collection.deleteMany({ a: 3 });
+console.log('Deleted documents =>', deleteResult);
 ```
 
-### Parse
+### Index a Collection
 
-The engine which parses the contents of your file containing environment
-variables is available to use. It accepts a String or Buffer and will return
-an Object with the parsed keys and values.
+[Indexes](https://www.mongodb.com/docs/manual/indexes/) can improve your application's
+performance. The following function creates an index on the **a** field in the
+**documents** collection.
 
 ```js
-const dotenv = require('dotenv')
-const buf = Buffer.from('BASIC=basic')
-const config = dotenv.parse(buf) // will return an object
-console.log(typeof config, config) // object { BASIC : 'basic' }
+const indexName = await collection.createIndex({ a: 1 });
+console.log('index name =', indexName);
 ```
 
-#### Options
+For more detailed information, see the [indexing strategies page](https://www.mongodb.com/docs/manual/applications/indexes/).
 
-##### debug
+## Error Handling
 
-Default: `false`
+If you need to filter certain errors from our driver, we have a helpful tree of errors described in [etc/notes/errors.md](https://github.com/mongodb/node-mongodb-native/blob/HEAD/etc/notes/errors.md).
 
-Turn on logging to help debug why certain keys or values are not being set as you expect.
+It is our recommendation to use `instanceof` checks on errors and to avoid relying on parsing `error.message` and `error.name` strings in your code.
+We guarantee `instanceof` checks will pass according to semver guidelines, but errors may be sub-classed or their messages may change at any time, even patch releases, as we see fit to increase the helpfulness of the errors.
 
-```js
-const dotenv = require('dotenv')
-const buf = Buffer.from('hello world')
-const opt = { debug: true }
-const config = dotenv.parse(buf, opt)
-// expect a debug message because the buffer is not in KEY=VAL form
-```
+Any new errors we add to the driver will directly extend an existing error class and no existing error will be moved to a different parent class outside of a major release.
+This means `instanceof` will always be able to accurately capture the errors that our driver throws.
 
-### Populate
+```typescript
+const client = new MongoClient(url);
+await client.connect();
+const collection = client.db().collection('collection');
 
-The engine which populates the contents of your .env file to `process.env` is available for use. It accepts a target, a source, and options. This is useful for power users who want to supply their own objects.
-
-For example, customizing the source:
-
-```js
-const dotenv = require('dotenv')
-const parsed = { HELLO: 'world' }
-
-dotenv.populate(process.env, parsed)
-
-console.log(process.env.HELLO) // world
-```
-
-For example, customizing the source AND target:
-
-```js
-const dotenv = require('dotenv')
-const parsed = { HELLO: 'universe' }
-const target = { HELLO: 'world' } // empty object
-
-dotenv.populate(target, parsed, { override: true, debug: true })
-
-console.log(target) // { HELLO: 'universe' }
-```
-
-#### options
-
-##### Debug
-
-Default: `false`
-
-Turn on logging to help debug why certain keys or values are not being populated as you expect.
-
-##### override
-
-Default: `false`
-
-Override any environment variables that have already been set.
-
-## ❓ FAQ
-
-### Why is the `.env` file not loading my environment variables successfully?
-
-Most likely your `.env` file is not in the correct place. [See this stack overflow](https://stackoverflow.com/questions/42335016/dotenv-file-is-not-loading-environment-variables).
-
-Turn on debug mode and try again..
-
-```js
-require('dotenv').config({ debug: true })
-```
-
-You will receive a helpful error outputted to your console.
-
-### Should I commit my `.env` file?
-
-No. We **strongly** recommend against committing your `.env` file to version
-control. It should only include environment-specific values such as database
-passwords or API keys. Your production database should have a different
-password than your development database.
-
-### Should I have multiple `.env` files?
-
-We recommend creating one `.env` file per environment. Use `.env` for local/development, `.env.production` for production and so on. This still follows the twelve factor principles as each is attributed individually to its own environment. Avoid custom set ups that work in inheritance somehow (`.env.production` inherits values form `.env` for example). It is better to duplicate values if necessary across each `.env.environment` file.
-
-> In a twelve-factor app, env vars are granular controls, each fully orthogonal to other env vars. They are never grouped together as “environments”, but instead are independently managed for each deploy. This is a model that scales up smoothly as the app naturally expands into more deploys over its lifetime.
->
-> – [The Twelve-Factor App](http://12factor.net/config)
-
-### What rules does the parsing engine follow?
-
-The parsing engine currently supports the following rules:
-
-- `BASIC=basic` becomes `{BASIC: 'basic'}`
-- empty lines are skipped
-- lines beginning with `#` are treated as comments
-- `#` marks the beginning of a comment (unless when the value is wrapped in quotes)
-- empty values become empty strings (`EMPTY=` becomes `{EMPTY: ''}`)
-- inner quotes are maintained (think JSON) (`JSON={"foo": "bar"}` becomes `{JSON:"{\"foo\": \"bar\"}"`)
-- whitespace is removed from both ends of unquoted values (see more on [`trim`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim)) (`FOO=  some value  ` becomes `{FOO: 'some value'}`)
-- single and double quoted values are escaped (`SINGLE_QUOTE='quoted'` becomes `{SINGLE_QUOTE: "quoted"}`)
-- single and double quoted values maintain whitespace from both ends (`FOO="  some value  "` becomes `{FOO: '  some value  '}`)
-- double quoted values expand new lines (`MULTILINE="new\nline"` becomes
-
-```
-{MULTILINE: 'new
-line'}
-```
-
-- backticks are supported (`` BACKTICK_KEY=`This has 'single' and "double" quotes inside of it.` ``)
-
-### What happens to environment variables that were already set?
-
-By default, we will never modify any environment variables that have already been set. In particular, if there is a variable in your `.env` file which collides with one that already exists in your environment, then that variable will be skipped.
-
-If instead, you want to override `process.env` use the `override` option.
-
-```javascript
-require('dotenv').config({ override: true })
-```
-
-### How come my environment variables are not showing up for React?
-
-Your React code is run in Webpack, where the `fs` module or even the `process` global itself are not accessible out-of-the-box. `process.env` can only be injected through Webpack configuration.
-
-If you are using [`react-scripts`](https://www.npmjs.com/package/react-scripts), which is distributed through [`create-react-app`](https://create-react-app.dev/), it has dotenv built in but with a quirk. Preface your environment variables with `REACT_APP_`. See [this stack overflow](https://stackoverflow.com/questions/42182577/is-it-possible-to-use-dotenv-in-a-react-project) for more details.
-
-If you are using other frameworks (e.g. Next.js, Gatsby...), you need to consult their documentation for how to inject environment variables into the client.
-
-### Can I customize/write plugins for dotenv?
-
-Yes! `dotenv.config()` returns an object representing the parsed `.env` file. This gives you everything you need to continue setting values on `process.env`. For example:
-
-```js
-const dotenv = require('dotenv')
-const variableExpansion = require('dotenv-expand')
-const myEnv = dotenv.config()
-variableExpansion(myEnv)
-```
-
-### How do I use dotenv with `import`?
-
-Simply..
-
-```javascript
-// index.mjs (ESM)
-import 'dotenv/config' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-import express from 'express'
-```
-
-A little background..
-
-> When you run a module containing an `import` declaration, the modules it imports are loaded first, then each module body is executed in a depth-first traversal of the dependency graph, avoiding cycles by skipping anything already executed.
->
-> – [ES6 In Depth: Modules](https://hacks.mozilla.org/2015/08/es6-in-depth-modules/)
-
-What does this mean in plain language? It means you would think the following would work but it won't.
-
-`errorReporter.mjs`:
-```js
-class Client {
-  constructor (apiKey) {
-    console.log('apiKey', apiKey)
-
-    this.apiKey = apiKey
+try {
+  await collection.insertOne({ _id: 1 });
+  await collection.insertOne({ _id: 1 }); // duplicate key error
+} catch (error) {
+  if (error instanceof MongoServerError) {
+    console.log(`Error worth logging: ${error}`); // special case for some reason
   }
+  throw error; // still want to crash
 }
-
-export default new Client(process.env.API_KEY)
-```
-`index.mjs`:
-```js
-// Note: this is INCORRECT and will not work
-import * as dotenv from 'dotenv'
-dotenv.config()
-
-import errorReporter from './errorReporter.mjs' // process.env.API_KEY will be blank!
 ```
 
-`process.env.API_KEY` will be blank.
+## Nightly releases
 
-Instead, `index.mjs` should be written as..
+If you need to test with a change from the latest `main` branch, our `mongodb` npm package has nightly versions released under the `nightly` tag.
 
-```js
-import 'dotenv/config'
-
-import errorReporter from './errorReporter.mjs'
+```sh
+npm install mongodb@nightly
 ```
 
-Does that make sense? It's a bit unintuitive, but it is how importing of ES6 modules work. Here is a [working example of this pitfall](https://github.com/dotenv-org/examples/tree/master/usage/dotenv-es6-import-pitfall).
+Nightly versions are published regardless of testing outcome.
+This means there could be semantic breakages or partially implemented features.
+The nightly build is not suitable for production use.
 
-There are two alternatives to this approach:
+## Next Steps
 
-1. Preload dotenv: `node --require dotenv/config index.js` (_Note: you do not need to `import` dotenv with this approach_)
-2. Create a separate file that will execute `config` first as outlined in [this comment on #133](https://github.com/motdotla/dotenv/issues/133#issuecomment-255298822)
+- [MongoDB Documentation](https://www.mongodb.com/docs/manual/)
+- [MongoDB Node Driver Documentation](https://www.mongodb.com/docs/drivers/node/)
+- [Read about Schemas](https://www.mongodb.com/docs/manual/core/data-modeling-introduction/)
+- [Star us on GitHub](https://github.com/mongodb/node-mongodb-native)
 
-### Why am I getting the error `Module not found: Error: Can't resolve 'crypto|os|path'`?
+## License
 
-You are using dotenv on the front-end and have not included a polyfill. Webpack < 5 used to include these for you. Do the following:
+[Apache 2.0](LICENSE.md)
 
-```bash
-npm install node-polyfill-webpack-plugin
-```
-
-Configure your `webpack.config.js` to something like the following.
-
-```js
-require('dotenv').config()
-
-const path = require('path');
-const webpack = require('webpack')
-
-const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
-
-module.exports = {
-  mode: 'development',
-  entry: './src/index.ts',
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-  plugins: [
-    new NodePolyfillPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        HELLO: JSON.stringify(process.env.HELLO)
-      }
-    }),
-  ]
-};
-```
-
-Alternatively, just use [dotenv-webpack](https://github.com/mrsteele/dotenv-webpack) which does this and more behind the scenes for you.
-
-### What about variable expansion?
-
-Try [dotenv-expand](https://github.com/motdotla/dotenv-expand)
-
-### What about syncing and securing .env files?
-
-Use [dotenvx](https://github.com/dotenvx/dotenvx)
-
-### What if I accidentally commit my `.env` file to code?
-
-Remove it, [remove git history](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository) and then install the [git pre-commit hook](https://github.com/dotenvx/dotenvx#pre-commit) to prevent this from ever happening again. 
-
-```
-brew install dotenvx/brew/dotenvx
-dotenvx precommit --install
-```
-
-### How can I prevent committing my `.env` file to a Docker build?
-
-Use the [docker prebuild hook](https://dotenvx.com/docs/features/prebuild).
-
-```bash
-# Dockerfile
-...
-RUN curl -fsS https://dotenvx.sh/ | sh
-...
-RUN dotenvx prebuild
-CMD ["dotenvx", "run", "--", "node", "index.js"]
-```
-
-## Contributing Guide
-
-See [CONTRIBUTING.md](CONTRIBUTING.md)
-
-## CHANGELOG
-
-See [CHANGELOG.md](CHANGELOG.md)
-
-## Who's using dotenv?
-
-[These npm modules depend on it.](https://www.npmjs.com/browse/depended/dotenv)
-
-Projects that expand it often use the [keyword "dotenv" on npm](https://www.npmjs.com/search?q=keywords:dotenv).
+© 2012-present MongoDB [Contributors](https://github.com/mongodb/node-mongodb-native/blob/HEAD/CONTRIBUTORS.md) \
+© 2009-2012 Christian Amor Kvalheim
